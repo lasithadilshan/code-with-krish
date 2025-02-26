@@ -125,3 +125,7 @@ Common error responses (HTTP 400):
 ### Tools  
 - [Node.js](https://nodejs.org/en/docs/)  
 - [npm](https://docs.npmjs.com/)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
