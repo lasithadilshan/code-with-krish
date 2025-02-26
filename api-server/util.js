@@ -95,10 +95,27 @@ function getSortedNumbers(numbersParam, sortType) {
     };
 }
 
+function getCountNumber(numbersParam, searchTerm) {
+    // Split into array and clean values
+    const items = numbersParam.split(',').map(item => item.trim());
+
+    // Count matches (case-sensitive)
+    const count = items.filter(item => item === searchTerm).length;
+
+    return {
+        status: 200,
+        data: {
+            search: searchTerm,
+            count: count,
+            numbers: items // Optional: return original list for verification
+        }
+    };
+}
 
 module.exports = {
     getMinNumber,
     getMaxNumber,
     getAvgNumber,
-    getSortedNumbers
+    getSortedNumbers,
+    getCountNumber
 };
