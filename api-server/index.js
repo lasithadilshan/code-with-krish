@@ -23,7 +23,8 @@ app.get('/number/avg', (req, res) => {
 
     const result = getAvgNumber(numbers);
     res.send(result);
-}); ///number/avg?numbers=1,4,7,44,676,......n
+}); 
+///number/avg?numbers=1,4,7,44,676,......n
 
 // 3. GET /number/sort - Returns a list of numbers sorted in ascending or descending order
 app.get('/number/sort', (req, res) => {
@@ -31,7 +32,8 @@ app.get('/number/sort', (req, res) => {
     const sortType = req.query.type;
     const result = getSortedNumbers(numbersParam, sortType);
     res.status(result.status).json(result.data);
-}); ///number/sort?numbers=1,4,7,44,676,......n&type (asc |dec)
+}); 
+///number/sort?numbers=1,4,7,44,676,......n&type (asc |dec)
 
 // 4. GET /number/count - Counts occurrences of a specific value in a list
 app.get('/number/count', (req, res) => {
@@ -47,7 +49,8 @@ app.get('/number/count', (req, res) => {
 
     const result = getCountNumber(numbers, search);
     res.status(result.status).json(result.data);
-}); ///number/count?numbers=1,A,saman,Kamal,676,......n&search=saman //need to return how many occurances
+}); 
+///number/count?numbers=1,A,saman,Kamal,676,......n&search=saman //need to return how many occurances
 
 app.get('/number/min', (req, res) => {
     const num1 = parseFloat(req.query.num1);
