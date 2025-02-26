@@ -32,40 +32,73 @@ function getMaxNumber(num1, num2) {
 
 
 function getAvgNumber(numbers) {
-    
-    let splitNumbers = numbers.split(",");
-    
-    const numberArray = splitNumbers.map(number => {
-        return parseFloat(number);
-    })
-    
+
+    // Split into array and validate
+    const splitNumbers = numbers.split(",");
+
+    // Convert to numbers and check validity
+    const numberArray = splitNumbers.map(num => parseFloat(num.trim()));
+
+    // Check for invalid numbers
     if (numberArray.some(isNaN)) {
-        return { 
+        return {
             status: 400,
-            data: { 
-                error: "Please check your values again" 
+            data: {
+                error: "All values must be valid numbers"
             },
         };
     }
-    
-    var total = 0;
-    
-    numberArray.forEach(num => {
-        console.log(num);
-        total += parseInt(num);
-    });
-    
-    let avg = total / numberArray.length;
-    
-    return { 
+
+    // Calculate average
+    const total = numberArray.reduce((sum, num) => sum + num, 0);
+    const avg = total / numberArray.length;
+
+    // Return result
+    return {
         status: 200,
-        data: { avg: avg } }
+        data: { avg: Number(avg.toFixed(2)) } // Rounded to 2 decimal places
+    };
+}
+
+function getSortedNumbers(numbersParam, sortType) {
+    if (!numbersParam) {
+        return {
+            status: 400,
+            data: { error: 'numbers parameter is required' }
+        };
+    }
+    if (!sortType) {
+        return {
+            status: 400,
+            data: { error: 'type parameter is required' }
+        };
+    }
+    const numbersArray = numbersParam.split(',').map(num => parseFloat(num));
+    if (numbersArray.some(isNaN)) {
+        return {
+            status: 400,
+            data: { error: 'All values in numbers must be valid numbers' }
+        };
+    }
+    if (sortType !== 'asc' && sortType !== 'dec') {
+        return {
+            status: 400,
+            data: { error: 'type must be "asc" or "dec"' }
+        };
+    }
+    const sortedNumbers = [...numbersArray].sort((a, b) =>
+        sortType === 'asc' ? a - b : b - a
+    );
+    return {
+        status: 200,
+        data: { sorted: sortedNumbers }
+    };
 }
 
 
-
-module.exports = { 
-    getMinNumber, 
-    getMaxNumber, 
-    getAvgNumber 
+module.exports = {
+    getMinNumber,
+    getMaxNumber,
+    getAvgNumber,
+    getSortedNumbers
 };
