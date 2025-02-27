@@ -40,5 +40,4 @@
    - `Inventory Service` updates stock.
    - `Order Service` stores order details.
    - `Order Service` returns a **success response** to the customer.
-
 ---
