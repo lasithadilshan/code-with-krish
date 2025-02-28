@@ -1,5 +1,5 @@
 import React from 'react';
-import createOrder from '../services/order-service';
+import CreateOrder from '../services/order-service';
 
 export default function OrderManagement() {
 
@@ -21,7 +21,7 @@ export default function OrderManagement() {
 					}
 				]
 			}
-			const response = await createOrder(order);
+			const response = await CreateOrder(order);
 			console.log(response.data);
 
 			// Send the order to the server
