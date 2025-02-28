@@ -15,7 +15,6 @@ function App() {
         <Routes>
           <Route path="/order-management" element={<OrderManagement/>}></Route>
         </Routes>
-
       </BrowserRouter>
     </>
   );
