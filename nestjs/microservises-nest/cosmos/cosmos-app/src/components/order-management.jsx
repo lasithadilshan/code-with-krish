@@ -1,5 +1,5 @@
-import React from 'react';
-import CreateOrder from '../services/order-service';
+import React, { useEffect } from 'react';
+import { CreateOrder, GetOrders } from '../services/order-service';
 
 export default function OrderManagement() {
 
@@ -7,6 +7,7 @@ export default function OrderManagement() {
 	const [productId, setProductId] = React.useState("");
 	const [price, setPrice] = React.useState("");
 	const [qty, setQty] = React.useState("");
+	const [orders, setOrders] = React.useState([]);
 
 	const handleOrderSubmit = async (e) => {
 		e.preventDefault();
@@ -27,6 +28,21 @@ export default function OrderManagement() {
 			// Send the order to the server
 		} catch (error) {
 			console.error(error);
+			alert(error.name);
+		}
+	}
+
+	useEffect(() => {
+		fetchOrders();
+	}, []);
+
+	const fetchOrders = async () => {
+		try {
+			const response = await GetOrders();
+			setOrders(response.data);
+		} catch (error) {
+			console.error(error);
+			alert(error.name);
 		}
 	}
 
@@ -48,6 +64,30 @@ export default function OrderManagement() {
 
 				<input type="submit" value="Submit" />
 			</form>
+			<div>
+				<table>
+					<tr>
+						<th>ID</th>
+						<th>Customer ID</th>
+						<th>Order Date</th>
+						<th></th>
+						<th></th>
+					</tr>
+					{
+						orders && orders.map((order) => {
+							return (
+								<tr>
+									<td>{order.id}</td>
+									<td>{order.customerId}</td>
+									<td>{order.createdAt.split("T")[0]}</td>
+									<td><button>Edit</button></td>
+									<td><button>View Items</button></td>
+								</tr>
+							)
+						})
+					}
+				</table>
+			</div>
 		</>
 	)
 }
