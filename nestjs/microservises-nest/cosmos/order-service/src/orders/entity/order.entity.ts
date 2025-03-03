@@ -17,8 +17,6 @@ export class Order {
     createdAt: Date;
     @Column({ default: 'PENDING' })
     status: string;
-
     @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
     items: OrderItem[];
-
 }

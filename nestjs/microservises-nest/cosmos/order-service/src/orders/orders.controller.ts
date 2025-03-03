@@ -6,7 +6,6 @@ import { UpdateOrderStatus } from './dto/update-order.dto';
 
 @Controller('orders')
 export class OrdersController {
-
     constructor(private ordersService: OrdersService) {}
 
     @Post()

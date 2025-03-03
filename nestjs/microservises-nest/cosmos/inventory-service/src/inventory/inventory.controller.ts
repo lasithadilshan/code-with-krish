@@ -1,23 +1,54 @@
-import { Controller, Post, Get, Body, Param, Patch } from '@nestjs/common';
+import { Controller, BadRequestException } from '@nestjs/common';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
-import { InventoryService } from './inventory.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { InventoryEntity } from './entity/inventory.entity';
+import { Repository } from 'typeorm';
 
 @Controller('inventory')
 export class InventoryController {
-    constructor(private readonly inventoryService: InventoryService) {}
+    constructor(
+        @InjectRepository(InventoryEntity)
+        private inventoryRepository: Repository<InventoryEntity>,
+    ) { }
 
-    @Post()
-    createInventory(@Body() createInventoryDto: CreateInventoryDto) {
-        return this.inventoryService.addInventory(createInventoryDto);
+    async create(inventoryDto: CreateInventoryDto) {
+        const inventory = this.inventoryRepository.create(inventoryDto);
+        return this.inventoryRepository.save(inventory);
     }
 
-    @Get(':id')
-    getInventory(@Param('id') id: number) {
-        return this.inventoryService.findInventory(id);
+    async getInventoryById(id: number) {
+        if (!id || isNaN(id)) {
+            throw new BadRequestException('Invalid inventory ID');
+        }
+        const inventory = await this.inventoryRepository.findOne({ where: { id } });
+
+        if (!inventory) {
+            throw new BadRequestException(`Product with id ${id}not found`);
+        }
+        return { ...inventory, price: Number(inventory.price) };
     }
 
-    @Patch(':id/reduce-stock')
-    reduceStock(@Param('id') id: number, @Body('quantity') quantity: number) {
-        return this.inventoryService.updateStock(id, quantity);
+    async getAllInventory() {
+        return this.inventoryRepository.find();
+    }
+
+    async updateStock(id: number, quantity: number) {
+        try {
+            const inventory = await this.inventoryRepository.findOne({ where: { id } });
+            inventory.quantity -= quantity;
+            await this.inventoryRepository.save(inventory);
+        } catch (error) {
+            throw new BadRequestException(
+                `Error updating stock for Product ID ${id}: ${error.message}`,
+            );
+        }
+    }
+
+    async validateStock(
+        id: number,
+        quantity: number,
+    ): Promise<{ available: boolean }> {
+        const inventory = await this.inventoryRepository.findOne({ where: { id } });
+        return { available: inventory ? inventory.quantity >= quantity : false };
     }
 }

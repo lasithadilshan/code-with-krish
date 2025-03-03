@@ -16,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: '1234',
       database: 'cosmos',
       entities: [Customer],
-      synchronize: true, // dont use this in production
+      synchronize: true, // don't use this in production
     }),
   ],
   controllers: [AppController],
