@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InventoryEntity } from './entity/inventory.entity';
 import { Repository } from 'typeorm';
 
-@Controller('inventory')
+@Controller('product')
 export class InventoryController {
     constructor(
         @InjectRepository(InventoryEntity)
@@ -39,7 +39,7 @@ export class InventoryController {
             await this.inventoryRepository.save(inventory);
         } catch (error) {
             throw new BadRequestException(
-                `Error updating stock for Product ID ${id}: ${error.message}`,
+                `Error updating stock for Inventory ID ${id}: ${error.message}`,
             );
         }
     }
